@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{B2DB29C8-EFFE-44CA-B270-008FAF6B3B7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{6CE6D87B-A9D3-4ED5-99C9-6D4A95888915}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2DB29C8-EFFE-44CA-B270-008FAF6B3B7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2DB29C8-EFFE-44CA-B270-008FAF6B3B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2DB29C8-EFFE-44CA-B270-008FAF6B3B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2DB29C8-EFFE-44CA-B270-008FAF6B3B7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B2DB29C8-EFFE-44CA-B270-008FAF6B3B7A} = {6CE6D87B-A9D3-4ED5-99C9-6D4A95888915}
+	EndGlobalSection
+EndGlobal
