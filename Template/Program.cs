@@ -9,12 +9,7 @@ using (var reader = File.OpenText("input.txt"))
     while (!reader.EndOfStream)
     {
         var line = reader.ReadLine();
-        if (line == null)
-        {
-            continue;
-        }
-
-        if (string.IsNullOrWhiteSpace(line))
+        if (line == null || string.IsNullOrWhiteSpace(line))
         {
             continue;
         }
