@@ -10,15 +10,19 @@ using (var reader = File.OpenText("input.txt"))
 {
     while (!reader.EndOfStream)
     {
-        string line = reader.ReadLine();
-        if (String.IsNullOrWhiteSpace(line))
+        var line = reader.ReadLine();
+        if (line == null)
+        {
+            continue;
+        }
+        if (string.IsNullOrWhiteSpace(line))
         {
             continue;
         }
 
         var valuesForLine = new List<int>();
 
-        for (int i = 0; i < line.Length; i++)
+        for (var i = 0; i < line.Length; i++)
         {
             var c = line[i];
             if (char.IsDigit(c))
@@ -35,12 +39,7 @@ stopwatch.Stop();
 var parsedIn = stopwatch.Elapsed;
 stopwatch.Restart();
 
-long total = 0;
-foreach (var valuesForLine in calibrationValues)
-{
-    int value = (valuesForLine.First() * 10) + valuesForLine.Last();
-    total += value;
-}
+var total = calibrationValues.Sum(x => (x.First() * 10) + x.Last());
 Console.WriteLine(total);
 
 stopwatch.Stop();

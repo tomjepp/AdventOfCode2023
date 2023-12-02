@@ -6,7 +6,21 @@ stopwatch.Start();
 
 using (var reader = File.OpenText("input.txt"))
 {
-    // parse your input here
+    while (!reader.EndOfStream)
+    {
+        var line = reader.ReadLine();
+        if (line == null)
+        {
+            continue;
+        }
+
+        if (string.IsNullOrWhiteSpace(line))
+        {
+            continue;
+        }
+
+        // parse your input here
+    }
 }
 
 stopwatch.Stop();

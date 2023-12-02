@@ -14,9 +14,13 @@ using (var reader = File.OpenText("input.txt"))
     // parse your input here
     while (!reader.EndOfStream)
     {
-        string line = reader.ReadLine();
+        var line = reader.ReadLine();
+        if (line == null)
+        {
+            continue;
+        }
 
-        if (String.IsNullOrWhiteSpace(line))
+        if (string.IsNullOrWhiteSpace(line))
         {
             continue;
         }
@@ -27,11 +31,11 @@ using (var reader = File.OpenText("input.txt"))
 
         var game = new Game(gameId);
         var ballCollection = new BallCollection();
-        for (int i = 0; i < items; i++)
+        for (var i = 0; i < items; i++)
         {
-            int numberOfBalls = int.Parse(match.Groups[2].Captures[i].Value);
-            string ballColour = match.Groups[3].Captures[i].Value;
-            string endChar = i < match.Groups[4].Captures.Count ? match.Groups[4].Captures[i].Value : "";
+            var numberOfBalls = int.Parse(match.Groups[2].Captures[i].Value);
+            var ballColour = match.Groups[3].Captures[i].Value;
+            var endChar = i < match.Groups[4].Captures.Count ? match.Groups[4].Captures[i].Value : "";
 
             switch (ballColour.ToLowerInvariant())
             {
@@ -78,76 +82,19 @@ Console.WriteLine();
 Console.WriteLine($"parsing time: {parsedIn.TotalMilliseconds:0.####} milliseconds");
 Console.WriteLine($"processing time: {processedIn.TotalMilliseconds:0.####} milliseconds");
 
-class Game
+internal class Game(int id)
 {
-    public int ID { get; set; }
-    public List<BallCollection> BallCollections { get; }
-
-    public bool IsPossible
-    {
-        get
-        {
-            return BallCollections.All(x => x.IsPossible);
-        }
-    }
-
-    public int RequiredRed
-    {
-        get
-        {
-            return BallCollections.Max(x => x.Red);
-        }
-    }
-
-    public int RequiredGreen
-    {
-        get
-        {
-            return BallCollections.Max(x => x.Green);
-        }
-    }
-
-    public int RequiredBlue
-    {
-        get
-        {
-            return BallCollections.Max(x => x.Blue);
-        }
-    }
-
-    public int Power
-    {
-        get
-        {
-            return RequiredRed * RequiredGreen * RequiredBlue;
-        }
-    }
-
-    public Game(int id)
-    {
-        ID = id;
-        BallCollections = new List<BallCollection>();
-    }
+    public int Id { get; set; } = id;
+    public List<BallCollection> BallCollections { get; } = new();
+    private int RequiredRed => BallCollections.Max(x => x.Red);
+    private int RequiredGreen => BallCollections.Max(x => x.Green);
+    private int RequiredBlue => BallCollections.Max(x => x.Blue);
+    public int Power => RequiredRed * RequiredGreen * RequiredBlue;
 }
 
-class BallCollection
+internal class BallCollection
 {
     public int Red { get; set; }
     public int Green { get; set; }
     public int Blue { get; set; }
-
-    public bool IsPossible
-    {
-        get
-        {
-            return (Red <= 12 && Green <= 13 && Blue <= 14);
-        }
-    }
-
-    public BallCollection()
-    {
-        Blue = 0;
-        Red = 0;
-        Green = 0;
-    }
 }
