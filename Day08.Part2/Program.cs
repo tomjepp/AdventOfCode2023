@@ -137,7 +137,6 @@ long GreatestCommonDivisor(long a, long b)
     return b == 0 ? a : GreatestCommonDivisor(b, a % b);
 }
 
-
 class Node
 {
     public string Name { get; set; }
