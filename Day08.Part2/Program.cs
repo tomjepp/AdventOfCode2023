@@ -114,7 +114,7 @@ foreach (var path in paths)
 }
 
 // calculate & output your result here
-long result = LowestCommonMultipleGroup(paths.Select(x => (long)x.FirstWinStepsCount));
+long result = Helpers.Math.LowestCommonMultiple(paths.Select(x => (long)x.FirstWinStepsCount));
 Console.WriteLine(result);
 
 stopwatch.Stop();
@@ -123,19 +123,6 @@ var processedIn = stopwatch.Elapsed;
 Console.WriteLine();
 Console.WriteLine($"parsing time: {parsedIn.TotalMilliseconds:0.####} milliseconds");
 Console.WriteLine($"processing time: {processedIn.TotalMilliseconds:0.####} milliseconds");
-
-long LowestCommonMultipleGroup(IEnumerable<long> numbers)
-{
-    return numbers.Aggregate(LowestCommonMultiple);
-}
-long LowestCommonMultiple(long a, long b)
-{
-    return Math.Abs(a * b) / GreatestCommonDivisor(a, b);
-}
-long GreatestCommonDivisor(long a, long b)
-{
-    return b == 0 ? a : GreatestCommonDivisor(b, a % b);
-}
 
 class Node
 {
