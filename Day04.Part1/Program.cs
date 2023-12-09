@@ -41,14 +41,8 @@ using (var reader = File.OpenText("input.txt"))
             numbersOnCard.Add(int.Parse(numberOnCardString));
         }
 
-        var card = new Card()
-        {
-            Id = cardId,
-            WinningNumbers = winningNumbers,
-            NumbersOnCard = numbersOnCard,
-        };
+        var card = new Card(cardId, winningNumbers, numbersOnCard);
         cards.Add(card);
-        //Console.WriteLine($"{line} - score: {card.Score}");
     }
 }
 
@@ -67,11 +61,11 @@ Console.WriteLine();
 Console.WriteLine($"parsing time: {parsedIn.TotalMilliseconds:0.####} milliseconds");
 Console.WriteLine($"processing time: {processedIn.TotalMilliseconds:0.####} milliseconds");
 
-class Card
+class Card(int id, List<int> winningNumbers, List<int> numbersOnCard)
 {
-    public int Id { get; set; }
-    public List<int> WinningNumbers { get; set; }
-    public List<int> NumbersOnCard { get; set; }
+    public int Id { get; } = id;
+    public List<int> WinningNumbers { get; } = winningNumbers;
+    public List<int> NumbersOnCard { get; } = numbersOnCard;
 
     public long Score
     {

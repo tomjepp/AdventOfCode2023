@@ -7,13 +7,12 @@ stopwatch.Start();
 
 var seeds = new List<long>();
 Dictionary<string, Map> mapsBySource = new Dictionary<string, Map>();
-Dictionary<string, Map> mapsByDestination = new Dictionary<string, Map>();
 
 var mapHeaderRegex = new Regex("^([a-z]+)-to-([a-z]+) map:$", RegexOptions.Compiled);
 
 using (var reader = File.OpenText("input.txt"))
 {
-    string seedLine = reader.ReadLine();
+    string seedLine = reader.ReadLine() ?? throw new NullReferenceException();
     var seedLinePieces = seedLine.Split(':', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
     var seedStrings = seedLinePieces[1].Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
     foreach (var seedString in seedStrings)
@@ -54,13 +53,7 @@ using (var reader = File.OpenText("input.txt"))
             rangeLine = reader.ReadLine();
         }
 
-        var map = new Map()
-        {
-            Source = from,
-            Destination = to,
-            Ranges = ranges,
-        };
-        mapsByDestination.Add(to, map);
+        var map = new Map(from, to, ranges);
         mapsBySource.Add(from, map);
     }
 }
@@ -78,15 +71,12 @@ foreach (var seed in seeds)
 
     while (mapsBySource.ContainsKey(mapSource))
     {
-        Console.WriteLine($"{mapSource}: {sourceValue}");
         var map = mapsBySource[mapSource];
         sourceValue = map.MapValue(sourceValue);
         mapSource = map.Destination;
     }
 
-    Console.WriteLine($"{mapSource}: {sourceValue}");
     seedLocations.Add(seed, sourceValue);
-    Console.WriteLine();
 }
 
 Console.WriteLine(seedLocations.Values.Min());
@@ -98,11 +88,11 @@ Console.WriteLine();
 Console.WriteLine($"parsing time: {parsedIn.TotalMilliseconds:0.####} milliseconds");
 Console.WriteLine($"processing time: {processedIn.TotalMilliseconds:0.####} milliseconds");
 
-class Map
+class Map(string source, string destination, List<Range> ranges)
 {
-    public string Source { get; set; }
-    public string Destination { get; set; }
-    public List<Range> Ranges { get; set; }
+    public string Source { get; } = source;
+    public string Destination { get; } = destination;
+    public List<Range> Ranges { get; } = ranges;
 
     public long MapValue(long sourceValue)
     {

@@ -10,11 +10,11 @@ using (var reader = File.OpenText("input.txt"))
 
     while (!reader.EndOfStream)
     {
-        var timeLine = reader.ReadLine();
+        var timeLine = reader.ReadLine() ?? throw new NullReferenceException();
         var timeLinePieces = timeLine.Split(':', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         var durationStrings = timeLinePieces[1]
             .Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        var distanceLine = reader.ReadLine();
+        var distanceLine = reader.ReadLine() ?? throw new NullReferenceException();
         var distanceLinePieces = distanceLine.Split(':', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         var distanceStrings = distanceLinePieces[1]
             .Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
@@ -78,11 +78,9 @@ class Race
 
                 continue;
             }
-            else
-            {
-                beatenRecord = true;
-                WinningDistances.Add(i, distance);
-            }
+
+            beatenRecord = true;
+            WinningDistances.Add(i, distance);
         }
     }
 }

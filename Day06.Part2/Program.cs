@@ -4,16 +4,16 @@ var stopwatch = new Stopwatch();
 
 stopwatch.Start();
 
-Race race = null;
+Race? race = null;
 using (var reader = File.OpenText("input.txt"))
 {
 
     while (!reader.EndOfStream)
     {
-        var timeLine = reader.ReadLine();
+        var timeLine = reader.ReadLine() ?? throw new NullReferenceException();
         var timeLinePieces = timeLine.Split(':', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         var durationString = timeLinePieces[1].Replace(" ", "");
-        var distanceLine = reader.ReadLine();
+        var distanceLine = reader.ReadLine() ?? throw new NullReferenceException();
         var distanceLinePieces = distanceLine.Split(':', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         var distanceString = distanceLinePieces[1].Replace(" ", "");
         race = new Race()
@@ -24,11 +24,16 @@ using (var reader = File.OpenText("input.txt"))
     }
 }
 
+if (race is null)
+{
+    throw new Exception("Failed to parse a race?");
+}
+
 stopwatch.Stop();
 var parsedIn = stopwatch.Elapsed;
 stopwatch.Restart();
 
-long product = 1;
+
 // calculate & output your result here
 race.CalculateDistances();
 Console.WriteLine(race.WinningDistancesCount);
@@ -62,11 +67,9 @@ class Race
 
                 continue;
             }
-            else
-            {
-                beatenRecord = true;
-                WinningDistancesCount++;
-            }
+
+            beatenRecord = true;
+            WinningDistancesCount++;
         }
     }
 }

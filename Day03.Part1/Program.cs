@@ -40,13 +40,7 @@ using (var reader = File.OpenText("input.txt"))
                 }
 
                 var value = int.Parse(line.Substring(column, length));
-                var number = new Number()
-                {
-                    Grid = grid,
-                    Value = value,
-                    Points = points,
-                };
-
+                var number = new Number(grid, points, value);
                 foreach (var point in points)
                 {
                     grid.Add(point, number);
@@ -80,10 +74,6 @@ var parsedIn = stopwatch.Elapsed;
 stopwatch.Restart();
 
 int sum = numbers.Where(x => x.IsAdjacentToSymbol()).Sum(x => x.Value);
-foreach (var number in numbers)
-{
-    Console.WriteLine($"{number.Value} {number.IsAdjacentToSymbol()}");
-}
 Console.WriteLine(sum);
 
 stopwatch.Stop();
@@ -99,9 +89,7 @@ struct Point
     public int Y;
 }
 
-abstract class Item
-{
-}
+abstract class Item;
 
 class Symbol : Item
 {
@@ -109,11 +97,12 @@ class Symbol : Item
     public char Value { get; set; }
 }
 
-class Number : Item
+class Number(Dictionary<Point, Item> grid, List<Point> points, int value)
+    : Item
 {
-    public Dictionary<Point, Item> Grid { get; set; }
-    public List<Point> Points { get; set; }
-    public int Value { get; set; }
+    private Dictionary<Point, Item> Grid { get; } = grid;
+    private List<Point> Points { get; } = points;
+    public int Value { get; } = value;
 
     public bool IsAdjacentToSymbol()
     {

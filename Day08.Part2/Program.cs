@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net.Sockets;
 using System.Text.RegularExpressions;
 
 var stopwatch = new Stopwatch();
@@ -13,7 +12,7 @@ var regex = new Regex(@"^([0-9A-Z]+) = \(([0-9A-Z]+), ([0-9A-Z]+)\)$");
 
 using (var reader = File.OpenText("input.txt"))
 {
-    instructionsLine = reader.ReadLine();
+    instructionsLine = reader.ReadLine() ?? throw new NullReferenceException();
 
     while (!reader.EndOfStream)
     {
@@ -25,12 +24,7 @@ using (var reader = File.OpenText("input.txt"))
 
         // parse your input here
         var match = regex.Match(line);
-        var node = new Node()
-        {
-            Name = match.Groups[1].Value,
-            Left = match.Groups[2].Value,
-            Right = match.Groups[3].Value,
-        };
+        var node = new Node(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value);
         nodes.Add(node.Name, node);
     }
 }
@@ -44,10 +38,7 @@ foreach (var node in nodes.Values)
 {
     if (node.Name.EndsWith("A"))
     {
-        var path = new Path()
-        {
-            StartingNode = node,
-        };
+        var path = new Path(node);
         paths.Add(path);
     }
 }
@@ -81,7 +72,7 @@ foreach (var path in paths)
 // find second wins
 foreach (var path in paths)
 {
-    var currentNode = path.EndingNode;
+    var currentNode = path.EndingNode ?? throw new NullReferenceException();
     int steps = path.FirstWinStepsCount;
     while (steps == path.FirstWinStepsCount || !currentNode.Name.EndsWith("Z"))
     {
@@ -124,17 +115,17 @@ Console.WriteLine();
 Console.WriteLine($"parsing time: {parsedIn.TotalMilliseconds:0.####} milliseconds");
 Console.WriteLine($"processing time: {processedIn.TotalMilliseconds:0.####} milliseconds");
 
-class Node
+class Node(string name, string left, string right)
 {
-    public string Name { get; set; }
-    public string Left { get; set; }
-    public string Right { get; set; }
+    public string Name { get; } = name;
+    public string Left { get; } = left;
+    public string Right { get; } = right;
 }
 
-class Path
+class Path(Node startingNode)
 {
-    public Node StartingNode { get; set; }
-    public Node EndingNode { get; set; }
+    public Node StartingNode { get; } = startingNode;
+    public Node? EndingNode { get; set; }
     public int FirstWinStepsCount { get; set; }
     public int SecondWinStepsCount { get; set; }
 }

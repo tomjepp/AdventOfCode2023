@@ -40,11 +40,7 @@ using (var reader = File.OpenText("input.txt"))
                 }
 
                 var value = int.Parse(line.Substring(column, length));
-                var number = new Number()
-                {
-                    Value = value,
-                    Points = points,
-                };
+                var number = new Number(points, value);
 
                 foreach (var point in points)
                 {
@@ -59,9 +55,8 @@ using (var reader = File.OpenText("input.txt"))
                     X = column,
                     Y = row,
                 };
-                var gear = new Gear()
+                var gear = new Gear(grid)
                 {
-                    Grid = grid,
                     Point = point,
                     Value = line[column],
                 };
@@ -98,9 +93,7 @@ struct Point
     public int Y;
 }
 
-abstract class Item
-{
-}
+abstract class Item;
 
 class Symbol : Item
 {
@@ -108,15 +101,15 @@ class Symbol : Item
     public char Value { get; set; }
 }
 
-class Number : Item
+class Number(List<Point> points, int value) : Item
 {
-    public List<Point> Points { get; set; }
-    public int Value { get; set; }
+    public List<Point> Points { get; } = points;
+    public int Value { get; } = value;
 }
 
-class Gear : Symbol
+class Gear(Dictionary<Point, Item> grid) : Symbol
 {
-    public Dictionary<Point, Item> Grid { get; set; }
+    public Dictionary<Point, Item> Grid { get; } = grid;
 
     public int GetGearRatio()
     {
@@ -142,13 +135,15 @@ class Gear : Symbol
                     continue;
                 }
 
-                if (Grid[point] is Number)
+                if (Grid[point] is not Number) continue;
+                var number = Grid[point] as Number;
+                if (number is null)
                 {
-                    var number = Grid[point] as Number;
-                    if (!adjacentNumbers.Contains(number))
-                    {
-                        adjacentNumbers.Add(number);
-                    }
+                    throw new InvalidOperationException();
+                }
+                if (!adjacentNumbers.Contains(number))
+                {
+                    adjacentNumbers.Add(number);
                 }
 
             }
